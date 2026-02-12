@@ -1,60 +1,74 @@
 <!DOCTYPE html>
 <html>
-    <head>
-<title>My Baby Book AI</title>
-
+<head>
+<meta charset="UTF-8">
+<title>Baby AI Story Book</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-body {
-    background-color: #f4f4f4;
-    font-family: Arial;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:linear-gradient(to right,#74ebd5,#ACB6E5);
+    display:flex;
+    justify-content:center;
+    padding:20px;
 }
 
-.card {
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    width: 400px;
-    text-align: center;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+.card{
+    background:white;
+    width:400px;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.2);
 }
 
-h1 {
-    color: #ff4081;
+h1{
+    text-align:center;
+    color:#4a63e7;
 }
 
-button {
-    background-color: #2196f3;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-top: 5px;
+input,select{
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    border-radius:8px;
+    border:1px solid #ccc;
 }
 
-input, select {
-    padding: 8px;
-    width: 90%;
-    margin-bottom: 10px;
+button{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    background:#4a63e7;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
 }
 
-#story {
-    margin-top: 15px;
-    font-size: 14px;
-    color: black;
-    text-align: left;
-    white-space: pre-line;
+button:hover{
+    background:#2f47c7;
 }
 
-.error {
-    color: red;
-    font-size: 14px;
+#preview{
+    width:150px;
+    height:150px;
+    border-radius:15px;
+    object-fit:cover;
+    display:none;
+    margin:auto;
+    margin-top:10px;
+
+    /* Cartoon effect */
+    filter: contrast(160%) saturate(180%) brightness(110%);
+}
+
+#story{
+    margin-top:15px;
+    font-size:14px;
+    line-height:1.6;
+    white-space:pre-line;
 }
 </style>
 </head>
@@ -63,67 +77,107 @@ input, select {
 
 <div class="card">
 
-    <h1>My Baby Book AI 📖✨</h1>
-<p>Create magical stories for your little star 🌟</p>
+<h1>✨ Baby Story Creator ✨</h1>
 
-    <input type="text" id="babyName" placeholder="Enter baby name">
-    
-        <select id="storyType">
-    <option value="habit">Good Habit Story</option>
-    <option value="bravery">Bravery Story</option>
-    <option value="kindness">Kindness Story</option>
+<input type="text" id="name" placeholder="Enter Baby Name">
+
+<select id="gender">
+<option value="">Select Gender</option>
+<option value="boy">Boy 👦</option>
+<option value="girl">Girl 👧</option>
 </select>
-<div class="error" id="error"></div>
-    
 
-    <button onclick="generateStory()">Generate Story</button>
-    <button onclick="downloadPDF()">Download PDF</button>
+<select id="type">
+<option value="">Select Story Type</option>
+<option value="adventure">Adventure 🚀</option>
+<option value="moral">Moral 📚</option>
+<option value="fantasy">Fantasy 🦄</option>
+<option value="funny">Funny 😂</option>
+</select>
 
-    <div id="story"></div>
+<input type="file" id="photo" accept="image/*">
+<img id="preview">
+
+<button onclick="generateStory()">Generate Story</button>
+
+<div id="story"></div>
 
 </div>
-    <script>
-let generatedStory = "";
 
-function generateStory() {
-    var name = document.getElementById("babyName").value;
-    var type = document.getElementById("storyType").value;
-    var error = document.getElementById("error");
+<script>
+let babyImage="";
 
-    if (name === "") {
-        error.innerHTML = "Please enter baby name!";
-        return;
-    } else {
-        error.innerHTML = "";
+document.getElementById("photo").addEventListener("change",function(e){
+    const reader=new FileReader();
+    reader.onload=function(){
+        babyImage=reader.result;
+        document.getElementById("preview").src=babyImage;
+        document.getElementById("preview").style.display="block";
     }
+    reader.readAsDataURL(e.target.files[0]);
+});
 
-    if (type === "habit") {
-        generatedStory =
-        "🌟 Once upon a time, there was a sweet child named " + name + 
-        ". " + name + " loved chocolates and never brushed teeth properly.\n\n" +
-        "One day, tooth fairy visited and said brushing is important!\n\n" +
-        "From that day, " + name + " brushed daily and became a happy child.\n\n" +
-        "💡 Moral: Good habits make you strong and happy!";
-    }
+function generateStory(){
 
-    else if (type === "bravery") {
-        generatedStory =
-        "🦁 There was a brave child named " + name + 
-        ". One day, a puppy was stuck in rain.\n\n" +
-        name + " helped the puppy without fear.\n\n" +
-        "Everyone praised " + name + " for bravery.\n\n" +
-        "💡 Moral: Be brave and help others!";
-    }
+let name=document.getElementById("name").value;
+let gender=document.getElementById("gender").value;
+let type=document.getElementById("type").value;
 
-    else if (type === "kindness") {
-        generatedStory =
-        "❤️ " + name + " was known for kindness.\n\n" +
-        "One day, " + name + " shared toys with a sad friend.\n\n" +
-        "The friend smiled brightly.\n\n" +
-        "💡 Moral: Kindness always wins hearts!";
-    }
+if(name=="" || gender=="" || type==""){
+    alert("Please fill all details!");
+    return;
+}
 
-    document.getElementById("story").innerText = generatedStory;
+let story="";
+
+if(type=="adventure"){
+story=
+name+" was a curious little explorer who loved discovering new places.\n\n"+
+"One bright morning, "+name+" found a mysterious map hidden under the pillow.\n\n"+
+"The map led to a secret jungle filled with colorful birds and talking animals.\n\n"+
+"With courage in the heart, "+name+" crossed rivers and climbed hills bravely.\n\n"+
+"Suddenly, a golden treasure chest appeared shining under the sun.\n\n"+
+"Inside it was not gold, but a magical book of bravery.\n\n"+
+name+" returned home stronger, happier, and full of adventurous dreams.";
+}
+
+if(type=="moral"){
+story=
+name+" was known as the kindest child in the neighborhood.\n\n"+
+"One day, "+name+" saw a small kitten crying near the road.\n\n"+
+"Without fear, "+name+" picked up the kitten and searched for its home.\n\n"+
+"After asking many people, the owner was finally found.\n\n"+
+"The family thanked "+name+" with warm smiles and blessings.\n\n"+
+"That evening, everyone praised the caring heart.\n\n"+
+name+" learned that kindness always brings happiness back.";
+}
+
+if(type=="fantasy"){
+story=
+name+" lived in a world where stars whispered secrets at night.\n\n"+
+"One magical evening, a glowing fairy appeared near the window.\n\n"+
+"The fairy invited "+name+" to a rainbow kingdom above the clouds.\n\n"+
+"There were flying horses and castles made of light.\n\n"+
+name+" was crowned as the guardian of happiness.\n\n"+
+"Every laugh created sparkles in the sky.\n\n"+
+"When morning came, "+name+" woke up smiling, carrying magic in the heart.";
+}
+
+if(type=="funny"){
+story=
+name+" loved making everyone laugh every single day.\n\n"+
+"One morning, "+name+" wore two different shoes by mistake.\n\n"+
+"Instead of crying, "+name+" danced proudly in school.\n\n"+
+"Friends started laughing and joined the dance.\n\n"+
+"Soon the classroom turned into a mini party.\n\n"+
+"Even the teacher couldn't stop smiling.\n\n"+
+name+" proved that laughter is the best superpower in the world.";
+}
+
+document.getElementById("story").innerText=story;
+
 }
 </script>
 
+</body>
+</html>
