@@ -1,72 +1,80 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Baby Story App</title>
+    <head>
+<title>My Baby Book AI</title>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-    <style>
-        body {
-            background-color: #f4f4f4;
-            font-family: Arial;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+<style>
+body {
+    background-color: #f4f4f4;
+    font-family: Arial;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            width: 400px;
-            text-align: center;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
 
-        h1 {
-            color: #ff4081;
-        }
+h1 {
+    color: #ff4081;
+}
 
-        button {
-            background-color: #2196f3;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 5px;
-        }
+button {
+    background-color: #2196f3;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 5px;
+}
 
-        input {
-            padding: 8px;
-            width: 90%;
-            margin-bottom: 10px;
-        }
+input, select {
+    padding: 8px;
+    width: 90%;
+    margin-bottom: 10px;
+}
 
-        #story {
-            margin-top: 15px;
-            font-size: 14px;
-            color: black;
-            text-align: left;
-            white-space: pre-line;
-        }
+#story {
+    margin-top: 15px;
+    font-size: 14px;
+    color: black;
+    text-align: left;
+    white-space: pre-line;
+}
 
-        .error {
-            color: red;
-            font-size: 14px;
-        }
-    </style>
+.error {
+    color: red;
+    font-size: 14px;
+}
+</style>
 </head>
 
 <body>
 
 <div class="card">
 
-    <h1>Baby Moral Story 🌟</h1>
+    <h1>My Baby Book AI 📖✨</h1>
+<p>Create magical stories for your little star 🌟</p>
 
     <input type="text" id="babyName" placeholder="Enter baby name">
-    <div class="error" id="error"></div>
+    
+        <select id="storyType">
+    <option value="habit">Good Habit Story</option>
+    <option value="bravery">Bravery Story</option>
+    <option value="kindness">Kindness Story</option>
+</select>
+<div class="error" id="error"></div>
+    
 
     <button onclick="generateStory()">Generate Story</button>
     <button onclick="downloadPDF()">Download PDF</button>
@@ -74,58 +82,48 @@
     <div id="story"></div>
 
 </div>
+    <script>
+let generatedStory = "";
 
-<script>
-    let generatedStory = "";
+function generateStory() {
+    var name = document.getElementById("babyName").value;
+    var type = document.getElementById("storyType").value;
+    var error = document.getElementById("error");
 
-    function generateStory() {
-        var name = document.getElementById("babyName").value;
-        var error = document.getElementById("error");
-
-        if (name === "") {
-            error.innerHTML = "Please enter baby name!";
-            return;
-        } else {
-            error.innerHTML = "";
-        }
-
-        generatedStory = 
-        "एक छोटी सी लड़की/लड़का था, उसका नाम था " + name + 
-        "। वो बात-बात पर गुस्सा होता/होती था। उसकी मां उसे हमेशा समझाती रहती कि '" 
-        + name + " बेटा, इतना गुस्सा करना अच्छी बात नहीं है।' लेकिन फिर भी उसके स्वभाव में कोई बदलाव नहीं आया।\n\n" +
-
-        "एक दिन " + name + 
-        " अपना होमवर्क करने में व्यस्त था। उसकी टेबल पर एक सुंदर-सा फूलों से सजा पॉट रखा था। तभी उसके छोटे भाई का हाथ उस पॉट से टकराया और गिरने पर उसके कई टुकड़े हो गए।\n\n" +
-
-        "अब क्या, " + name + 
-        " गुस्से से बौखला उठा/उठी। तभी वहां उसकी मां ने एक आईना लाकर उसके सामने रख दिया। अब गुस्से से भरे " 
-        + name + " ने अपनी शक्ल आईने में देखी, जो कि गुस्से में बहुत ही बुरी लग रही थी।\n\n" +
-
-        "अपना ऐसा बिगड़ा चेहरा देखते ही " + name + 
-        " का गुस्सा छू-मंतर हो गया। तब उसकी मां ने कहा, 'देखा " + name + 
-        "! गुस्से में तुम्हारी शक्ल आईने में कितनी बुरी लगती है, क्योंकि आईना कभी झूठ नहीं बोलता।'\n\n" +
-
-        "अब " + name + 
-        " को पता चल गया था कि गुस्सा करना कितना बुरा होता है। तभी से उसने गुस्सा न करने का एक वादा अपने आप से किया।";
-
-        document.getElementById("story").innerText = generatedStory;
+    if (name === "") {
+        error.innerHTML = "Please enter baby name!";
+        return;
+    } else {
+        error.innerHTML = "";
     }
 
-    async function downloadPDF() {
-        if (generatedStory === "") {
-            alert("Please generate story first!");
-            return;
-        }
-
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-
-        doc.setFont("helvetica");
-        doc.setFontSize(12);
-
-        doc.text(generatedStory, 10, 20, { maxWidth: 180 });
-
-        doc.save("baby_story.pdf");
+    if (type === "habit") {
+        generatedStory =
+        "🌟 Once upon a time, there was a sweet child named " + name + 
+        ". " + name + " loved chocolates and never brushed teeth properly.\n\n" +
+        "One day, tooth fairy visited and said brushing is important!\n\n" +
+        "From that day, " + name + " brushed daily and became a happy child.\n\n" +
+        "💡 Moral: Good habits make you strong and happy!";
     }
 
+    else if (type === "bravery") {
+        generatedStory =
+        "🦁 There was a brave child named " + name + 
+        ". One day, a puppy was stuck in rain.\n\n" +
+        name + " helped the puppy without fear.\n\n" +
+        "Everyone praised " + name + " for bravery.\n\n" +
+        "💡 Moral: Be brave and help others!";
+    }
+
+    else if (type === "kindness") {
+        generatedStory =
+        "❤️ " + name + " was known for kindness.\n\n" +
+        "One day, " + name + " shared toys with a sad friend.\n\n" +
+        "The friend smiled brightly.\n\n" +
+        "💡 Moral: Kindness always wins hearts!";
+    }
+
+    document.getElementById("story").innerText = generatedStory;
+}
 </script>
+
